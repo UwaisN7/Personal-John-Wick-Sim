@@ -1,20 +1,54 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class SimpleMovement3D : MonoBehaviour
+
+// When player presses WASD or pushes stick direction 
+// Player moves in the desired direction
+// At a speed controlled by the game 
+public class playerMovement : MonoBehaviour
 {
-    // Movement speed multiplier editable in the Inspector
-    public float speed = 5.0f;
+
+    public float movementSpeed;
+
+    private CharacterController cc;
+
+    private PlayerControls playerControls;
+    
+
+    //Now what happens after this ??? 
+    //Well lets get aquainted with the new input system 
+
+    //Old input system was just input.get axis raw and boom done 
+   
+    void Awake()
+    {
+       playerControls= new PlayerControls();
+        cc = GetComponent<CharacterController>();
+      
+    }
+
+    private void OnEnable()
+    {
+        playerControls.Enable();
+    }
+    private void OnDisable()
+    {
+        playerControls.Disable();
+    }
 
     void Update()
     {
-        // Get input from keyboard (Values range from -1 to 1)
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        
+        OnMove();
 
-        // Calculate direction based on player input
-        Vector3 movementVector = new Vector3(horizontalInput, 0, verticalInput);
+    }
 
-        // Move the object relative to world space smoothly over time
-        transform.Translate(movementVector * speed * Time.deltaTime, Space.World);
+    void OnMove()
+    {
+      Vector3 movementInput = playerControls.Gameplay.Move.ReadValue<Vector2>();
+
+        Vector3 move = new Vector3(movementInput.x,0,movementInput.y);//
+
+        transform.Translate (move*movementSpeed*Time.deltaTime);
     }
 }
