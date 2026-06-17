@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94919d5be87f8d14eaf1c353bb4c339a, type: 3}
+  m_Name: Pistol
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  weaponName: Pistol
+  damage: 10
+  fireRate: 0.25
+  projectileSpeed: 80
+  projectileLifetime: 3
+  spreadAngle: 1
+  projectilePrefab: {fileID: 4789485699190064776, guid: f85ed02a47cea05489dbb946f179dea3, type: 3}
+  cameraShakeForce: 0.5
+  recoilAmount: 1
