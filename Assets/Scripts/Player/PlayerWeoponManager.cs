@@ -1,30 +1,76 @@
 using UnityEngine;
 
+
 public class PlayerWeaponManager : MonoBehaviour
 {
-    [SerializeField] private Gun startingGun;
+    [Header("Weapon Holding")]
     [SerializeField] private Transform weaponHolder;
+
+    [Header("Dropping")]
+    [SerializeField] private Transform dropPoint;
+    [SerializeField] private float dropForwardForce = 2f;
+    [SerializeField] private float dropUpForce = 1f;
 
     private Gun currentGun;
 
-    void Start()
+    public void EquipGun(Gun gun)
     {
-        EquipGun(startingGun);
+        if (gun == null)
+        {
+            Debug.LogWarning("Tried to equip null gun.");
+            return;
+        }
+
+        if (weaponHolder == null)
+        {
+            Debug.LogWarning("No weapon holder assigned.");
+            return;
+        }
+
+        if (currentGun != null)
+        {
+            DropCurrentGun();
+        }
+
+        currentGun = gun;
+        currentGun.SetHeld(weaponHolder);
+
+        Debug.Log("Equipped gun: " + currentGun.name);
     }
 
-    public void EquipGun(Gun newGun)
+    public void DropCurrentGun()
     {
-        if (newGun == null) return;
+        if (currentGun == null) return;
 
-        currentGun = newGun;
+        Vector3 dropPosition;
+        Quaternion dropRotation;
 
-        currentGun.transform.SetParent(weaponHolder);
-        currentGun.transform.localPosition = Vector3.zero;
-        currentGun.transform.localRotation = Quaternion.identity;
+        if (dropPoint != null)
+        {
+            dropPosition = dropPoint.position;
+            dropRotation = dropPoint.rotation;
+        }
+        else
+        {
+            dropPosition = transform.position + transform.forward * 1f + Vector3.up * 1f;
+            dropRotation = transform.rotation;
+        }
+
+        Vector3 dropForce = transform.forward * dropForwardForce + Vector3.up * dropUpForce;
+
+        currentGun.SetDropped(dropPosition, dropRotation, dropForce);
+        currentGun = null;
     }
 
+    //Throw Gun logic here called from the shoot script because is Aiming is called there
     public Gun GetCurrentGun()
     {
         return currentGun;
     }
+
+    public bool HasGun()
+    {
+        return currentGun != null;
+    }
+
 }
